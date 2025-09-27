@@ -109,12 +109,14 @@ moodChart.update();
 
 // Update log list
 historyList.innerHTML = '';
-data.mood_dates.forEach((date, idx) => {
-  const value = data.mood_values[idx];
+for (let i = data.mood_dates.length - 1; i >= 0; i--) {
+  const date = data.mood_dates[i];
+  const value = data.mood_values[i];
+  const note = (data.mood_notes && data.mood_notes[i]) ? data.mood_notes[i] : '';
   const li = document.createElement('li');
-  li.textContent = `${date} - ${value}`;
+  li.textContent = `${date} — ${value} — ${note || ''}`;
   historyList.appendChild(li);
-})
+}
 
 });
 
