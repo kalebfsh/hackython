@@ -12,6 +12,15 @@ class MoodForm(forms.ModelForm):
             'note': forms.Textarea(attrs={'rows':2, 'placeholder': 'optional note...'}),
         }
 
+class PetRenameForm(forms.Form):
+    name = forms.CharField(max_length=30)
+
+    def clean_name(self):
+        name = self.cleaned_data['name'].strip()
+        if not name:
+            raise forms.ValidationError('Name cannot be empty.')
+        return name
+
 class SignUpForm(UserCreationForm):
     class Meta:
         model = User
