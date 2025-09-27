@@ -27,10 +27,12 @@ def dashboard(request):
     pet, _ = Pet.objects.get_or_create(user=request.user)
     form = MoodForm()
     # load last 14 mood entries
-    recent = request.user.moods.order_by('-created_at')[:14]
 
-    moods = MoodEntry.objects.filter(user=request.user).order_by("created_at")
-    mood_dates = [m.created_at.strftime("%Y-%m-%d") for m in moods]
+
+    moods = MoodEntry.objects.filter(user=request.user).order_by("-created_at")[:14]
+    moods = list(reversed(moods))
+    recent = moods
+    mood_dates = [m.created_at.strftime("%b %d %H:%M") for m in moods]
     mood_values = [m.value for m in moods]
     mood_notes = [m.note for m in moods]
 
