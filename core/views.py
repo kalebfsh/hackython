@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import MoodForm, SignUpForm
+from .forms import MoodForm, SignUpForm, PetRenameForm
 from .models import Pet, MoodEntry
 from django.http import JsonResponse
 from django.contrib.auth import login
@@ -67,6 +67,18 @@ def submit_mood(request):
             'mood_notes': mood_notes,
         }
         return JsonResponse(data)
+    return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+
+
+@login_required
+@require_POST
+def rename_pet(request):
+    form = PetRenameForm(request.POST)
+    if form.is_valid():
+        pet = request.user.pet
+        pet.name = form.cleaned_data['name']
+        pet.save(update_fields=['name'])
+        return JsonResponse({'success': True, 'pet': pet.as_dict()})
     return JsonResponse({'success': False, 'errors': form.errors}, status=400)
 
 

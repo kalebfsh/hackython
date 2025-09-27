@@ -24,6 +24,7 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('', views.dashboard, name='dashboard'),
     path('submit-mood/', views.submit_mood, name='submit_mood'),
+    path('rename-pet/', views.rename_pet, name='rename_pet'),
     path('pet.json', views.pet_json, name='pet_json'),
 ]
 

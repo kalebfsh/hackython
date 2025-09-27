@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<h1>Your pet: {{ pet.name }}</h1>
+<h1>Your pet: <span id="pet-name">{{ pet.name }}</span></h1>
 <div id="pet-area">
   <!-- Use simple images / emojis in static/pets/ -->
   <img id="pet-img" src="{% static 'pets/'|add:pet.appearance|add:'l1.png' %}" alt="pet" width="200">
@@ -10,6 +10,16 @@
     Happiness: <span id="pet-happiness">{{ pet.happiness|floatformat:0 }}</span>
   </div>
 </div>
+
+<section id="rename">
+  <h3>Rename your pet</h3>
+  <form id="rename-form" method="post" action="{% url 'rename_pet' %}">
+    {% csrf_token %}
+    <input type="text" name="name" id="rename-input" value="{{ pet.name }}" maxlength="30" required>
+    <button type="submit">Rename</button>
+  </form>
+  <div id="rename-message" style="color: #b00;"></div>
+</section>
 
 <section id="checkin">
   <h2>How are you feeling?</h2>
@@ -72,7 +82,6 @@ const moodChart = new Chart(ctx, {
 
 
 
-
 <script>
 const form = document.getElementById('mood-form');
 const valueInput = document.querySelector('input[name="value"]');
@@ -118,6 +127,35 @@ for (let i = data.mood_dates.length - 1; i >= 0; i--) {
   historyList.appendChild(li);
 }
 
+});
+
+// Rename pet handler
+const renameForm = document.getElementById('rename-form');
+const renameInput = document.getElementById('rename-input');
+const renameMsg = document.getElementById('rename-message');
+const petNameEl = document.getElementById('pet-name');
+
+renameForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  renameMsg.textContent = '';
+  const formData = new FormData(renameForm);
+  const resp = await fetch(renameForm.action, {
+    method: 'POST',
+    headers: {'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value},
+    body: formData
+  });
+  if (!resp.ok) {
+    renameMsg.textContent = 'Error renaming pet';
+    return;
+  }
+  const data = await resp.json();
+  if (!data.success) {
+    // Show first error message if available
+    const errs = data.errors && data.errors.name ? data.errors.name : ['Rename failed'];
+    renameMsg.textContent = errs[0];
+    return;
+  }
+  petNameEl.textContent = data.pet.name;
 });
 
 
