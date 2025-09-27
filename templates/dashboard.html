@@ -4,7 +4,7 @@
 <h1>Your pet: {{ pet.name }}</h1>
 <div id="pet-area">
   <!-- Use simple images / emojis in static/pets/ -->
-  <img id="pet-img" src="{% static 'pets/'|add:pet.appearance|add:'.png' %}" alt="pet" width="200">
+  <img id="pet-img" src="{% static 'pets/'|add:pet.appearance|add:'l1.png' %}" alt="pet" width="200">
   <div id="pet-stats">
     Level: <span id="pet-level">{{ pet.level }}</span><br>
     Happiness: <span id="pet-happiness">{{ pet.happiness|floatformat:0 }}</span>
@@ -22,6 +22,7 @@
   <div id="message"></div>
 </section>
 
+
 <section id="history">
   <h3>Recent</h3>
   <ul>
@@ -33,10 +34,50 @@
   </ul>
 </section>
 
+<canvas id="moodChart" width="600" height="400"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const moodDates = {{ mood_dates|safe }};
+const moodValues = {{ mood_values|safe }};
+</script>
+<script>
+  const ctx = document.getElementById('moodChart').getContext('2d');
+
+const moodChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: moodDates,
+        datasets: [{
+            label: 'Mood Trend',
+            data: moodValues,
+            borderColor: 'blue',
+            backgroundColor: 'lightblue',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            x: { title: { display: true, text: 'Date' }, min: 0, max: 14 },
+            y: { title: { display: true, text: 'Mood (1–100)' }, min: 0, max: 100 }
+        }
+    }
+});
+</script>
+
+
+
+
+
+
 <script>
 const form = document.getElementById('mood-form');
 const valueInput = document.querySelector('input[name="value"]');
 const valueLabel = document.getElementById('value-label');
+const historyList = document.querySelector('#history ul');
 valueLabel.textContent = valueInput.value;
 valueInput.addEventListener('input', e => valueLabel.textContent = e.target.value);
 
@@ -53,11 +94,33 @@ form.addEventListener('submit', async (e) => {
     return;
   }
   const data = await resp.json();
+  // In case saving mood fails:
+  if (!data.success) {document.getElementById('message').textContent = 'Error saving mood'; return;}
+
   // update pet image and stats
   document.getElementById('pet-img').src = "{% static 'pets/' %}" + data.pet.appearance + ".png";
   document.getElementById('pet-level').textContent = data.pet.level;
   document.getElementById('pet-happiness').textContent = Math.round(data.pet.happiness);
   document.getElementById('message').textContent = 'Saved! Your pet seems ' + (data.pet.happiness>60 ? 'happy :)' : 'quiet.');
+// Update chart
+moodChart.data.labels = data.mood_dates;
+moodChart.data.datasets[0].data = data.mood_values;
+moodChart.update();
+
+// Update log list
+historyList.innerHTML = '';
+data.mood_dates.forEach((date, idx) => {
+  const value = data.mood_values[idx];
+  const li = document.createElement('li');
+  li.textContent = `${date} - ${value}`;
+  historyList.appendChild(li);
+})
+
 });
+
+
+// Reset slider (NOT implemented idk if this would be nice or not)
+valueInput.value = 50;
+valueLabel.textContent = 50;
 </script>
 {% endblock %}
