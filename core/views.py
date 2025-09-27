@@ -56,7 +56,7 @@ def submit_mood(request):
         #get last 14 moods
         moods = MoodEntry.objects.filter(user=request.user).order_by('-created_at')[:14]
         # Format dates to match template "M j H:i" (e.g., "Sep 5 14:30"): %b = abbreviated month, %-d = day w/o leading zero (Unix), %H:%M = 24h time
-        mood_dates = [m.created_at.strftime("%b %-d %H:%M") for m in reversed(moods)]
+        mood_dates = [m.created_at.strftime("%b %d %H:%M") for m in reversed(moods)]
         mood_values = [m.value for m in reversed(moods)]
         mood_notes = [(m.note or "") for m in reversed(moods)]
         data = {
