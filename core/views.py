@@ -88,3 +88,9 @@ def rename_pet(request):
 def pet_json(request):
     pet = request.user.pet
     return JsonResponse(pet.as_dict())
+
+@login_required
+@require_POST
+def clear_mood_log(request):
+    MoodEntry.objects.filter(user=request.user).delete()
+    return JsonResponse({'success': True, "mood_dates": [], "mood_values": [], "mood_notes": []})
