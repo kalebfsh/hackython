@@ -32,11 +32,13 @@ def dashboard(request):
     moods = MoodEntry.objects.filter(user=request.user).order_by("created_at")
     mood_dates = [m.created_at.strftime("%Y-%m-%d") for m in moods]
     mood_values = [m.value for m in moods]
+    mood_notes = [m.note for m in moods]
 
     context = {
         'pet': pet, 'form': form, 'recent': recent,
         "mood_dates": json.dumps(mood_dates),
         "mood_values": json.dumps(mood_values),
+        "mood_notes": json.dumps(mood_notes),
     }
     return render(request, "dashboard.html", context)
 
@@ -53,13 +55,16 @@ def submit_mood(request):
 
         #get last 14 moods
         moods = MoodEntry.objects.filter(user=request.user).order_by('-created_at')[:14]
-        mood_dates = [m.created_at.strftime("%Y-%m-%d") for m in reversed(moods)]
+        # Format dates to match template "M j H:i" (e.g., "Sep 5 14:30"): %b = abbreviated month, %-d = day w/o leading zero (Unix), %H:%M = 24h time
+        mood_dates = [m.created_at.strftime("%b %-d %H:%M") for m in reversed(moods)]
         mood_values = [m.value for m in reversed(moods)]
+        mood_notes = [(m.note or "") for m in reversed(moods)]
         data = {
             'success': True,
             'pet': pet.as_dict(),
             'mood_dates': mood_dates,
             'mood_values': mood_values,
+            'mood_notes': mood_notes,
         }
         return JsonResponse(data)
     return JsonResponse({'success': False, 'errors': form.errors}, status=400)
