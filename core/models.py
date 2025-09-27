@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models import Avg
 from datetime import timedelta
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Pet(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='pet')
