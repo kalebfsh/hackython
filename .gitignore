@@ -3,5 +3,5 @@ db.sqlite3
 *.pyc
 staticfiles/
 .env
-idea/
+.idea/
 venv/
