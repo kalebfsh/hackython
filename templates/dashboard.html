@@ -34,6 +34,7 @@
 
 
 <section id="history">
+  <button id="clear-log" type="button">Clear Log</button>
   <h3>Recent</h3>
   <ul style="list-style-position: inside;">
     {% for m in recent %}
@@ -49,12 +50,12 @@
 
 <script>
   const moodDates = {{ mood_dates|safe }};
-const moodValues = {{ mood_values|safe }};
+  const moodValues = {{ mood_values|safe }};
 </script>
 <script>
   const ctx = document.getElementById('moodChart').getContext('2d');
 
-const moodChart = new Chart(ctx, {
+  const moodChart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: moodDates,
@@ -78,15 +79,42 @@ const moodChart = new Chart(ctx, {
 });
 </script>
 
-
-
-
-
 <script>
-const form = document.getElementById('mood-form');
 const valueInput = document.querySelector('input[name="value"]');
 const valueLabel = document.getElementById('value-label');
 const historyList = document.querySelector('#history ul');
+const clearButton = document.getElementById('clear-log');
+const form = document.getElementById('mood-form');
+
+valueLabel.textContent = valueInput.value;
+valueInput.addEventListener('input', e => valueLabel.textContent = e.target.value);
+
+// Clear log
+clearButton.addEventListener('click', async () => {
+  if (!confirm("Are you sure you want to clear all moods?")) return;
+
+  const resp = await fetch("{% url 'clear_log' %}", {
+    method: 'POST',
+    headers: {'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value},
+  });
+
+  if (resp.ok) {
+    const data = await resp.json();
+    if (data.success) {
+      // Reset chart
+      moodChart.data.labels = [];
+      moodChart.data.datasets[0].data = [];
+      moodChart.update();
+
+      // Reset log
+      historyList.innerHTML = '<li>No entries yet</li>';
+    }
+  } else {
+    alert('Server error while clearing log.');
+  }
+});
+
+// const historyList = document.querySelector('#history ul');
 valueLabel.textContent = valueInput.value;
 valueInput.addEventListener('input', e => valueLabel.textContent = e.target.value);
 
@@ -119,13 +147,14 @@ moodChart.update();
 // Update log list
 historyList.innerHTML = '';
 for (let i = data.mood_dates.length - 1; i >= 0; i--) {
-  const date = data.mood_dates[i];
-  const value = data.mood_values[i];
-  const note = (data.mood_notes && data.mood_notes[i]) ? data.mood_notes[i] : '';
   const li = document.createElement('li');
-  li.textContent = `${date} — ${value} — ${note || ''}`;
+  li.textContent = `${data.mood_dates[i]} — ${data.mood_values[i]} — ${data.mood_notes[i] || ''}`;
   historyList.appendChild(li);
 }
+
+// Clear note box
+  const noteInput = document.querySelector('input[name="npte"], textarea[name="note"]');
+  if (noteInput) noteInput.value = '';
 
 });
 
@@ -158,9 +187,5 @@ renameForm.addEventListener('submit', async (e) => {
   petNameEl.textContent = data.pet.name;
 });
 
-
-// Reset slider (NOT implemented idk if this would be nice or not)
-valueInput.value = 50;
-valueLabel.textContent = 50;
 </script>
 {% endblock %}
