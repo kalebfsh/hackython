@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<h1>Your pet: {{ pet.name }}</h1>
+<div id="pet-area">
+  <!-- Use simple images / emojis in static/pets/ -->
+  <img id="pet-img" src="{% static 'pets/'|add:pet.appearance|add:'.png' %}" alt="pet" width="200">
+  <div id="pet-stats">
+    Level: <span id="pet-level">{{ pet.level }}</span><br>
+    Happiness: <span id="pet-happiness">{{ pet.happiness|floatformat:0 }}</span>
+  </div>
+</div>
+
+<section id="checkin">
+  <h2>How are you feeling?</h2>
+  <form id="mood-form" method="post">
+    {% csrf_token %}
+    {{ form.value }} <span id="value-label">50</span><br>
+    {{ form.note }}<br>
+    <button type="submit">Check-in</button>
+  </form>
+  <div id="message"></div>
+</section>
+
+<section id="history">
+  <h3>Recent</h3>
+  <ul>
+    {% for m in recent %}
+      <li>{{ m.created_at|date:"M j H:i" }} — {{ m.value }} — {{ m.note|default:"" }}</li>
+    {% empty %}
+      <li>No entries yet</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<script>
+const form = document.getElementById('mood-form');
+const valueInput = document.querySelector('input[name="value"]');
+const valueLabel = document.getElementById('value-label');
+valueLabel.textContent = valueInput.value;
+valueInput.addEventListener('input', e => valueLabel.textContent = e.target.value);
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(form);
+  const resp = await fetch("{% url 'submit_mood' %}", {
+    method: 'POST',
+    headers: {'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value},
+    body: formData
+  });
+  if (!resp.ok) {
+    document.getElementById('message').textContent = 'Error saving mood';
+    return;
+  }
+  const data = await resp.json();
+  // update pet image and stats
+  document.getElementById('pet-img').src = "{% static 'pets/' %}" + data.pet.appearance + ".png";
+  document.getElementById('pet-level').textContent = data.pet.level;
+  document.getElementById('pet-happiness').textContent = Math.round(data.pet.happiness);
+  document.getElementById('message').textContent = 'Saved! Your pet seems ' + (data.pet.happiness>60 ? 'happy :)' : 'quiet.');
+});
+</script>
+{% endblock %}

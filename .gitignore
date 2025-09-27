@@ -1,1 +1,7 @@
 venv/\n__pycache__/\ndb.sqlite3\nstaticfiles/\n.env
+venv/
+__pycache__/
+db.sqlite3
+*.pyc
+staticfiles/
+.env
