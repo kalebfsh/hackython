@@ -4,7 +4,7 @@
 <h1>Your pet: <span id="pet-name">{{ pet.name }}</span></h1>
 <div id="pet-area">
   <!-- Use simple images / emojis in static/pets/ -->
-  <img id="pet-img" src="{% static 'pets/l1.png' %}" alt="pet" width="200">
+  <img id="pet-img" src="{% static 'pets/'|add:pet.appearance|add:'.png' %}" alt="pet" width="200">
   <div id="pet-stats">
     Level: <span id="pet-level">{{ pet.level }}</span><br>
     Happiness: <span id="pet-happiness">{{ pet.happiness|floatformat:0 }}</span>
