@@ -35,7 +35,7 @@
 
 <section id="history">
   <h3>Recent</h3>
-  <ul>
+  <ul style="list-style-position: inside;">
     {% for m in recent %}
       <li>{{ m.created_at|date:"M j H:i" }} — {{ m.value }} — {{ m.note|default:"" }}</li>
     {% empty %}
