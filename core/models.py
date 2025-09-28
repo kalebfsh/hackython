@@ -11,7 +11,7 @@ class Pet(models.Model):
     exp = models.IntegerField(default=0)
     level = models.IntegerField(default=1)
     happiness = models.FloatField(default=50.0)  # 0-100
-    appearance = models.CharField(max_length=20, default='baby')  # 'baby','teen','adult'
+    appearance = models.CharField(max_length=20, default='baby_happy')  # 'baby','teen','adult'
     last_updated = models.DateTimeField(auto_now=True)
 
     def recalc_from_recent_moods(self):
@@ -33,8 +33,18 @@ class Pet(models.Model):
             self.appearance = 'teen'
         else:
             self.appearance = 'baby'
+
+        """Return the correct image filename based on age_stage and happiness"""
+        stage = self.appearance  # baby / teen / adult
+        if self.happiness >= 50:
+            mood = "happy"
+        else:
+            mood = "sad"
+        self.appearance = f"{stage}_{mood}"
         self.save()
 
+
+          # e.g., 'baby_happy.png'
     def as_dict(self):
         return {
             'name': self.name,
@@ -44,6 +54,8 @@ class Pet(models.Model):
             'appearance': self.appearance,
             'last_updated': self.last_updated.isoformat(),
         }
+
+
 
 class MoodEntry(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='moods')
