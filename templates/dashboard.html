@@ -9,7 +9,7 @@
       <div id="pet-stats">
         Level: <span id="pet-level">{{ pet.level }}</span><br>
         Happiness: <span id="pet-happiness">{{ pet.happiness|floatformat:0 }}</span>
-        Hunger: <span id="pet-hunger">{{ pet.hunger|floatformat:0 }}</span>
+        Hunger: <span id="pet-hunger-number">{{ pet.hunger|floatformat:0 }}</span>
       </div>
     </div>
 
@@ -273,8 +273,7 @@ renameForm.addEventListener('submit', async (e) => {
   petNameEl.textContent = data.pet.name;
 });
 
- document.getElementById('feed-apple').addEventListener('click', () => feedPet('apple'));
-document.getElementById('feed-cookie').addEventListener('click', () => feedPet('cookie'));
+ document.getElementById('feed-banana').addEventListener('click', () => feedPet('apple'));
 
 async function feedPet(food) {
   const resp = await fetch("{% url 'feed_pet' %}", {
@@ -294,7 +293,16 @@ async function feedPet(food) {
         document.getElementById('pet-stats').appendChild(hungerSpan);
     }
     document.getElementById('pet-hunger').textContent = `Hunger: ${Math.round(data.pet.hunger)}`;
-  }
+  }}
+
+const hungerEl = document.getElementById('pet-hunger-number');
+let hunger = parseFloat(hungerEl.textContent) || 0;
+
+// decrease by 1 every 10 seconds
+setInterval(() => {
+    hunger = Math.max(0, hunger - 1);
+    hungerEl.textContent = Math.round(hunger);
+}, 10000);
 
 </script>
 {% endblock %}

@@ -50,12 +50,13 @@ def dashboard(request):
 @require_POST
 def submit_mood(request):
     form = MoodForm(request.POST)
+    pet = request.user.pet
     pet.update_hunger()
     if form.is_valid():
         mood = form.save(commit=False)
         mood.user = request.user
         mood.save()
-        pet = request.user.pet
+
 
         #get last 14 moods
         moods = MoodEntry.objects.filter(user=request.user).order_by('-created_at')[:14]
@@ -98,6 +99,7 @@ def clear_mood_log(request):
     return JsonResponse({'success': True, "mood_dates": [], "mood_values": [], "mood_notes": []})
 
 def feed_pet(request):
+    pet = request.user.pet
     if request.method == 'POST':
         pet = request.user.pet
         food_type = request.POST.get('food')
