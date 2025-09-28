@@ -29,7 +29,7 @@ class Pet(models.Model):
             self.last_hunger_update = now
             self.save(update_fields=['hunger', 'last_hunger_update'])
 
-    def feed(self, amount=20):
+    def feed(self, amount=5):
         """Feed the pet to restore hunger."""
         self.update_hunger()
         self.hunger = min(100, self.hunger + amount)
