@@ -356,3 +356,30 @@ body {
     rgba(0,0,0,0.02)
   );
 }
+
+#banana-area {
+  width: 300px;
+  height: 300px;
+  border: 2px dashed #ccc;
+  position: relative;
+  overflow: hidden;
+  background: #fdf9e3;
+   background: url("/static/banana.png") center/contain no-repeat;
+  background-color: #fdf9e3;
+
+  /*background-blend-mode: soft-light;*/
+}
+
+/* Bananas start at 0 size */
+.banana {
+  position: absolute;
+  width: 0;
+  height: auto;
+  cursor: pointer;
+  transition: width 2s ease-in-out; /* smooth growth */
+}
+
+/* Final grown size */
+.banana.grow {
+  width: 50px;
+}
