@@ -9,6 +9,7 @@
       <div id="pet-stats">
         Level: <span id="pet-level">{{ pet.level }}</span><br>
         Happiness: <span id="pet-happiness">{{ pet.happiness|floatformat:0 }}</span>
+        Hunger: <span id="pet-hunger">{{ pet.hunger|floatformat:0 }}</span>
       </div>
     </div>
 
@@ -204,6 +205,29 @@ renameForm.addEventListener('submit', async (e) => {
   }
   petNameEl.textContent = data.pet.name;
 });
+
+ document.getElementById('feed-apple').addEventListener('click', () => feedPet('apple'));
+document.getElementById('feed-cookie').addEventListener('click', () => feedPet('cookie'));
+
+async function feedPet(food) {
+  const resp = await fetch("{% url 'feed_pet' %}", {
+    method: 'POST',
+    headers: {'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value},
+    body: new URLSearchParams({food})
+  });
+  if (!resp.ok) return alert('Error feeding pet.');
+  const data = await resp.json();
+  if (data.success) {
+    // update UI
+    document.getElementById('pet-happiness').textContent = Math.round(data.pet.happiness);
+    // show hunger somewhere:
+    if (!document.getElementById('pet-hunger')) {
+        const hungerSpan = document.createElement('div');
+        hungerSpan.id = 'pet-hunger';
+        document.getElementById('pet-stats').appendChild(hungerSpan);
+    }
+    document.getElementById('pet-hunger').textContent = `Hunger: ${Math.round(data.pet.hunger)}`;
+  }
 
 </script>
 {% endblock %}
