@@ -77,8 +77,29 @@
 const bananaArea = document.getElementById('banana-area');
 const bananaCounterEl = document.getElementById('banana-counter');
 let bananaCount = 0;
+class Bananas{
+  constructor(){
+    this.count = 0;
+  }
+  add(){
+    this.count++;
+  }
+  sub(){
+    this.count--;
+  }
+  r(){
+    return this.count;
+  }
+}
 
-function spawnBanana() {
+let bananas = new Bananas();
+
+function spawnBanana(b) {
+
+  if(b.r() >= 5){
+    return 0;
+  }
+  b.add();
   const banana = document.createElement('img');
   banana.src = "{% static '/tree/banana.png' %}";
   banana.classList.add('banana'); // starts at width: 0
@@ -98,6 +119,7 @@ function spawnBanana() {
 
   // clicking collects the banana
   banana.addEventListener('click', () => {
+    bananas.sub();
     bananaCount++;
     bananaCounterEl.textContent = bananaCount;
     banana.remove();
@@ -105,7 +127,9 @@ function spawnBanana() {
 }
 
 // spawn a new banana every 5 seconds
-setInterval(spawnBanana, 5000);
+setInterval(() => spawnBanana(bananas), 5000);
+
+
 
 // (optional) spawn one immediately on page load
 spawnBanana();
