@@ -278,6 +278,10 @@ let hunger = parseFloat(hungerEl.textContent) || 0;
  document.getElementById('feed-banana').addEventListener('click', () => feedPet('banana'));
 
 async function feedPet(food) {
+    if (food === 'banana' && bananaCount <= 0) {
+    alert("You don't have any bananas to feed!");
+    return;
+  }
   const resp = await fetch("{% url 'feed_pet' %}", {
     method: 'POST',
     headers: {'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value},
