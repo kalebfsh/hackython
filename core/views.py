@@ -103,11 +103,9 @@ def feed_pet(request):
     if request.method == 'POST':
         pet = request.user.pet
         food_type = request.POST.get('food')
-        amount = 20  # default
-        if food_type == 'cookie':
-            amount = 10
-        elif food_type == 'apple':
-            amount = 25
+        amount = 5  # default
+        if food_type == 'banana':
+            amount = 5
         pet.feed(amount)
         return JsonResponse({'success': True, 'pet': pet.as_dict()})
     pet.update_hunger()

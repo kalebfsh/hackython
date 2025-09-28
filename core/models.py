@@ -32,22 +32,12 @@ class Pet(models.Model):
     def feed(self, amount=20):
         """Feed the pet to restore hunger."""
         self.update_hunger()
-        self.hunger = min(100.0, self.hunger + amount)
+        self.hunger = min(100, self.hunger + amount)
         # Optionally boost happiness slightly:
         self.happiness = min(100.0, self.happiness + amount * 0.2)
         self.save(update_fields=['hunger', 'happiness'])
 
-    def as_dict(self):
-        self.update_hunger()  # keep hunger fresh
-        return {
-            'name': self.name,
-            'exp': self.exp,
-            'level': self.level,
-            'happiness': self.happiness,
-            'appearance': self.appearance,
-            'hunger': self.hunger,
-            'last_updated': self.last_updated.isoformat(),
-        }
+
 
     def recalc_from_recent_moods(self):
         """Recalculate happiness and level based on last 7 days of moods."""
@@ -80,13 +70,16 @@ class Pet(models.Model):
 
 
           # e.g., 'baby_happy.png'
+
     def as_dict(self):
+        self.update_hunger()  # keep hunger fresh
         return {
             'name': self.name,
             'exp': self.exp,
             'level': self.level,
             'happiness': self.happiness,
             'appearance': self.appearance,
+            'hunger': self.hunger,
             'last_updated': self.last_updated.isoformat(),
         }
 
