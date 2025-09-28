@@ -117,7 +117,7 @@ section {
   max-width: 220px;
   height: auto;
   filter: drop-shadow(0 10px 20px rgba(0,0,0,0.25));
-  background: radial-gradient(ellipse at center, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.02) 75%, rgba(0,0,0,0.0) 78%);
+  background: rgba(0,0,0,0.0);
   padding: 10px;
   border-radius: 16px;
 }
@@ -338,13 +338,7 @@ body {
 
 /* Give transparent PNGs a light backdrop so black outlines are visible */
 #pet-img {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0,0,0,0.04) 0%,
-    rgba(0,0,0,0.02) 65%,
-    rgba(0,0,0,0.01) 75%,
-    rgba(0,0,0,0.0) 78%
-  );
+  background: rgba(0,0,0,0.0);
   padding: 10px;
   border-radius: 16px;
 }
