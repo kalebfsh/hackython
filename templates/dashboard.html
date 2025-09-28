@@ -14,6 +14,7 @@
     </div>
 
     <section id="rename">
+
       <h3>Rename your pet</h3>
       <form id="rename-form" method="post" action="{% url 'rename_pet' %}">
         {% csrf_token %}
@@ -28,14 +29,20 @@
     <section id="food">
       <h3>Food</h3>
 
-      <div class="food-image-wrap">
-        <img src="/static/banana.png" alt="Fruit tree" class="food-tree">
-      </div>
+<!--      <div class="food-image-wrap">-->
+<!--        <img src="/static/banana.png" alt="Fruit tree" class="food-tree">-->
+<!--      </div>-->
+      <p>Bananas collected: <span id="banana-counter">0</span></p>
+
+  <!-- Banana growing area -->
+      <div id="banana-area"></div>
 
       <div class="food-list">
-        <button id="feed-apple">Feed: Apple</button>
-        <button id="feed-cookie">Feed: Cookie</button>
+        <button id="feed-banana">Feed: Banana</button>
+<!--        <button id="feed-cookie">Feed: Cookie</button>-->
+
       </div>
+
     </section>
   </div>
 </div>
@@ -66,7 +73,43 @@
 
 <canvas id="moodChart" width="600" height="400"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const bananaArea = document.getElementById('banana-area');
+const bananaCounterEl = document.getElementById('banana-counter');
+let bananaCount = 0;
 
+function spawnBanana() {
+  const banana = document.createElement('img');
+  banana.src = "{% static '/tree/banana.png' %}";
+  banana.classList.add('banana'); // starts at width: 0
+
+  // random position inside banana area
+  const x = Math.random() * (bananaArea.clientWidth - 50);
+  const y = Math.random() * (bananaArea.clientHeight - 50);
+  banana.style.left = `${x}px`;
+  banana.style.top = `${y}px`;
+
+  bananaArea.appendChild(banana);
+
+  // 👇 give the browser a tick before adding .grow
+  setTimeout(() => {
+    banana.classList.add('grow');
+  }, 50);
+
+  // clicking collects the banana
+  banana.addEventListener('click', () => {
+    bananaCount++;
+    bananaCounterEl.textContent = bananaCount;
+    banana.remove();
+  });
+}
+
+// spawn a new banana every 5 seconds
+setInterval(spawnBanana, 5000);
+
+// (optional) spawn one immediately on page load
+spawnBanana();
+</script>
 <script>
   const moodDates = {{ mood_dates|safe }};
   const moodValues = {{ mood_values|safe }};
