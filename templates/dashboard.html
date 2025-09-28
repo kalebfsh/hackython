@@ -293,7 +293,10 @@ async function feedPet(food) {
     // document.getElementById('pet-hunger').textContent = Math.round(data.pet.hunger);
     hunger = data.pet.hunger; // update the JS variable
     hungerEl.textContent = Math.round(hunger);
+    bananaCount = Math.max(0, bananaCount - 1);
+      bananaCounterEl.textContent = bananaCount;
   }}
+
 
 
 
