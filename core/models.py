@@ -13,6 +13,41 @@ class Pet(models.Model):
     happiness = models.FloatField(default=50.0)  # 0-100
     appearance = models.CharField(max_length=20, default='baby_happy')  # 'baby','teen','adult'
     last_updated = models.DateTimeField(auto_now=True)
+    hunger = models.FloatField(default=100.0)  # 0-100 (0 = starving, 100 = full)
+    last_hunger_update = models.DateTimeField(default=timezone.now)
+
+    def update_hunger(self):
+        """
+        Decrease hunger based on time elapsed since last update.
+        Example: lose 1 point per hour.
+        """
+        now = timezone.now()
+        elapsed = (now - self.last_hunger_update).total_seconds() / 1200.0  # hours
+        if elapsed > 0:
+            loss = elapsed * 1.0  # 1 hunger per hour
+            self.hunger = max(0.0, self.hunger - loss)
+            self.last_hunger_update = now
+            self.save(update_fields=['hunger', 'last_hunger_update'])
+
+    def feed(self, amount=20):
+        """Feed the pet to restore hunger."""
+        self.update_hunger()
+        self.hunger = min(100.0, self.hunger + amount)
+        # Optionally boost happiness slightly:
+        self.happiness = min(100.0, self.happiness + amount * 0.2)
+        self.save(update_fields=['hunger', 'happiness'])
+
+    def as_dict(self):
+        self.update_hunger()  # keep hunger fresh
+        return {
+            'name': self.name,
+            'exp': self.exp,
+            'level': self.level,
+            'happiness': self.happiness,
+            'appearance': self.appearance,
+            'hunger': self.hunger,
+            'last_updated': self.last_updated.isoformat(),
+        }
 
     def recalc_from_recent_moods(self):
         """Recalculate happiness and level based on last 7 days of moods."""

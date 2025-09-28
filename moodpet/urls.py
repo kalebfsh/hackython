@@ -27,5 +27,6 @@ urlpatterns = [
     path('rename-pet/', views.rename_pet, name='rename_pet'),
     path('pet.json', views.pet_json, name='pet_json'),
     path('clear-log/', views.clear_mood_log, name='clear_log'),
+    path('feed_pet/', views.feed_pet, name='feed_pet')
 ]
 
