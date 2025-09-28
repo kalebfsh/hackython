@@ -1,22 +1,22 @@
  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 :root {
-  --bg: #0f172a;           /* slate-900 */
-  --bg-soft: #111827;      /* gray-900 */
-  --panel: #111827;        /* gray-900 */
-  --panel-2: #0b1220;      /* deep panel */
-  --text: #e5e7eb;         /* gray-200 */
-  --muted: #94a3b8;        /* slate-400 */
-  --primary: #7c3aed;      /* violet-600 */
-  --primary-600: #6d28d9;  /* violet-700 */
-  --primary-700: #5b21b6;  /* violet-800 */
-  --accent: #22d3ee;       /* cyan-400 */
-  --success: #10b981;      /* emerald-500 */
-  --danger: #ef4444;       /* red-500 */
-  --ring: rgba(124, 58, 237, 0.35);
-  --border: rgba(148, 163, 184, 0.18);
-  --shadow-1: 0 10px 30px rgba(0, 0, 0, 0.35);
-  --shadow-2: 0 2px 12px rgba(124, 58, 237, 0.25);
+  --bg: #ffffff;           /* white background */
+  --bg-soft: #f8f8f8;      /* light grey panels */
+  --panel: #f8f8f8;
+  --panel-2: #f0f0f0;
+  --text: #000000;         /* black text */
+  --muted: #555555;        /* muted grey */
+  --primary: #000000;      /* primary = black */
+  --primary-600: #222222;
+  --primary-700: #444444;
+  --accent: #000000;       /* black accent */
+  --success: #000000;      /* all UI icons in black */
+  --danger: #000000;
+  --ring: rgba(0, 0, 0, 0.25);
+  --border: rgba(0, 0, 0, 0.18);
+  --shadow-1: 0 10px 30px rgba(0, 0, 0, 0.15);
+  --shadow-2: 0 2px 12px rgba(0, 0, 0, 0.15);
 }
 
 * { box-sizing: border-box; }
@@ -26,12 +26,12 @@ html, body { height: 100%; }
 body {
   margin: 0;
   font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji';
-  background: radial-gradient(1200px 600px at 20% -10%, rgba(124,58,237,0.35) 0%, rgba(124,58,237,0.08) 40%, transparent 70%),
-              radial-gradient(900px 500px at 100% 0%, rgba(34,211,238,0.25) 0%, rgba(34,211,238,0.08) 40%, transparent 70%),
-              var(--bg);
+  background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 header {
@@ -39,7 +39,7 @@ header {
   top: 0;
   z-index: 50;
   backdrop-filter: saturate(140%) blur(8px);
-  background: linear-gradient(180deg, rgba(15,23,42,0.85), rgba(15,23,42,0.65));
+  background: rgba(255,255,255,0.95);
   border-bottom: 1px solid var(--border);
 }
 
@@ -62,7 +62,7 @@ nav a {
   transition: color .2s ease, background-color .2s ease;
 }
 
-nav a:hover { color: #fff; background: rgba(124,58,237,0.15); }
+nav a:hover { color: #000; background: rgba(0,0,0,0.08); }
 
 .link-button {
   background: none;
@@ -73,7 +73,7 @@ nav a:hover { color: #fff; background: rgba(124,58,237,0.15); }
   cursor: pointer;
 }
 
-.link-button:hover { color: #fff; text-decoration: underline; }
+.link-button:hover { color: #000; text-decoration: underline; }
 
 main {
   max-width: 1000px;
@@ -84,13 +84,13 @@ main {
 /* Typography */
 h1, h2, h3 { margin: 0 0 12px; }
 h1 { font-size: 2rem; letter-spacing: -0.01em; }
-h2 { font-size: 1.4rem; color: #fff; }
+h2 { font-size: 1.4rem; color: #000; }
 h3 { font-size: 1.1rem; color: var(--muted); font-weight: 600; }
 p, li, label, span { color: var(--text); }
 
 /* Card-like sections */
 section {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+  background: rgba(0,0,0,0.02);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 18px;
@@ -104,7 +104,7 @@ section {
   grid-template-columns: 220px 1fr;
   align-items: center;
   gap: 20px;
-  background: linear-gradient(deg, rgba(256,256,256,0.9), rgba(124,58,237,0.02));
+  background: rgba(0,0,0,0.02);
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 18px;
@@ -116,7 +116,10 @@ section {
   width: 100%;
   max-width: 220px;
   height: auto;
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.25));
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.02) 75%, rgba(0,0,0,0.0) 78%);
+  padding: 10px;
+  border-radius: 16px;
 }
 
 #pet-stats {
@@ -132,8 +135,8 @@ section {
   min-width: 42px;
   padding: 2px 10px;
   border-radius: 999px;
-  background: rgba(34,211,238,0.12);
-  color: #e0f2fe;
+  background: rgba(0,0,0,0.08);
+  color: #000;
 }
 
 #top-grid {
@@ -188,7 +191,7 @@ form { margin: 0; }
 
 input[type="text"], textarea, select {
   width: 100%;
-  background: #0b1220;
+  background: #f0f0f0;
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -209,21 +212,14 @@ input[type="range"] {
   width: 100%;
   height: 6px;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
+  background: #000;
   outline: none;
 }
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px; height: 20px; border-radius: 50%;
-  background: #fff;
-  border: 3px solid var(--primary);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
-  cursor: pointer;
-}
+input[type="range"]::-webkit-slider-thumb,
 input[type="range"]::-moz-range-thumb {
   width: 20px; height: 20px; border-radius: 50%;
-  background: #fff; border: 3px solid var(--primary);
+  background: #fff;
+  border: 3px solid #000;
   box-shadow: 0 4px 12px rgba(0,0,0,0.35);
   cursor: pointer;
 }
@@ -237,30 +233,28 @@ button, .button {
   padding: 10px 14px;
   border-radius: 12px;
   border: 1px solid transparent;
-  background: linear-gradient(180deg, var(--primary), var(--primary-600));
+  background: #000;
   color: white;
   font-weight: 700;
   letter-spacing: 0.01em;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(124,58,237,0.35);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
   transition: transform .04s ease, filter .2s ease, box-shadow .2s ease, background .2s ease;
 }
-button:hover { filter: brightness(1.07); box-shadow: 0 10px 26px rgba(124,58,237,0.45); }
+button:hover { filter: brightness(1.07); box-shadow: 0 10px 26px rgba(0,0,0,0.35); }
 button:active { transform: translateY(1px); }
 
-/* Secondary button style via data-variant attribute if needed */
+/* Ghost button */
 button[data-variant="ghost"] {
   background: transparent;
   border-color: var(--border);
   color: var(--text);
   box-shadow: none;
 }
-button[data-variant="ghost"]:hover { background: rgba(255,255,255,0.04); }
+button[data-variant="ghost"]:hover { background: rgba(0,0,0,0.04); }
 
 /* Messages */
-#message, #rename-message { margin-top: 8px; min-height: 22px; }
-#message { color: var(--success); }
-#rename-message { color: var(--danger); }
+#message, #rename-message { margin-top: 8px; min-height: 22px; color: #000; }
 
 /* Lists */
 #history ul {
@@ -274,7 +268,7 @@ button[data-variant="ghost"]:hover { background: rgba(255,255,255,0.04); }
   padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: rgba(255,255,255,0.02);
+  background: rgba(0,0,0,0.02);
   color: var(--muted);
 }
 
@@ -282,7 +276,7 @@ button[data-variant="ghost"]:hover { background: rgba(255,255,255,0.04); }
 #moodChart {
   width: 100% !important;
   height: auto !important;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+  background: rgba(0,0,0,0.02);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 12px;
@@ -296,7 +290,8 @@ button[data-variant="ghost"]:hover { background: rgba(255,255,255,0.04); }
   margin-left: 8px;
   padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(124,58,237,0.18);
+  background: rgba(0,0,0,0.08);
+  color: #000;
 }
 
 /* Auth pages minor tweaks */
@@ -315,22 +310,22 @@ form[action$="login/"] , form[action$="signup/"] {
 
 /* --- Fixes for pet visibility and non-repeating background --- */
 :root {
-  --bg: #0f172a;
-  --bg-soft: #111827;
-  --panel: #111827;
-  --panel-2: #0b1220;
-  --text: #e5e7eb;
-  --muted: #94a3b8;
-  --primary: #7c3aed;
-  --primary-600: #6d28d9;
-  --primary-700: #5b21b6;
-  --accent: #22d3ee;
-  --success: #10b981;
-  --danger: #ef4444;
-  --ring: rgba(124, 58, 237, 0.35);
-  --border: rgba(148, 163, 184, 0.18);
-  --shadow-1: 0 10px 30px rgba(0, 0, 0, 0.35);
-  --shadow-2: 0 2px 12px rgba(124, 58, 237, 0.25);
+  --bg: #ffffff;          /* white background */
+  --bg-soft: #f8f8f8;
+  --panel: #f8f8f8;
+  --panel-2: #f0f0f0;
+  --text: #000000;        /* black text */
+  --muted: #555555;       /* muted grey */
+  --primary: #000000;
+  --primary-600: #222222;
+  --primary-700: #444444;
+  --accent: #000000;
+  --success: #000000;
+  --danger: #000000;
+  --ring: rgba(0, 0, 0, 0.25);
+  --border: rgba(0, 0, 0, 0.18);
+  --shadow-1: 0 10px 30px rgba(0, 0, 0, 0.15);
+  --shadow-2: 0 2px 12px rgba(0, 0, 0, 0.15);
 }
 
 body {
@@ -342,12 +337,22 @@ body {
 
 /* Give transparent PNGs a light backdrop so black outlines are visible */
 #pet-img {
-  background: radial-gradient(ellipse at center, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.85) 65%, rgba(255,255,255,0.65) 75%, rgba(255,255,255,0.0) 78%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,0.04) 0%,
+    rgba(0,0,0,0.02) 65%,
+    rgba(0,0,0,0.01) 75%,
+    rgba(0,0,0,0.0) 78%
+  );
   padding: 10px;
   border-radius: 16px;
 }
 
-/* Fix invalid gradient declaration on pet area by ensuring a subtle, valid glow */
+/* Subtle neutral gradient for the pet area */
 #pet-area {
-  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(124,58,237,0.02));
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.04),
+    rgba(0,0,0,0.02)
+  );
 }
